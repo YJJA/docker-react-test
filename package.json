@@ -15,8 +15,9 @@
     "test": "react-scripts test",
     "eject": "react-scripts eject",
     "server": "node index.js",
-    "docker:build": "docker build -t docker-react-test:0.1.4-test .",
-    "docker:run": "docker run --name docker-react-test-service --rm -d -p 3000:3000 docker-react-test:0.1.4-test"
+    "docker:build": "docker build -t registry.cn-shanghai.aliyuncs.com/sjweath/react-test:0.1.4-test .",
+    "docker:run": "docker run --name docker-test-service --rm -d -p 3000:3000 registry.cn-shanghai.aliyuncs.com/sjweath/react-test:0.1.4-test",
+    "docker:push": "docker push registry.cn-shanghai.aliyuncs.com/sjweath/react-test:0.1.4-test"
   },
   "eslintConfig": {
     "extends": "react-app"
