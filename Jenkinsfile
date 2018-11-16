@@ -1,42 +1,24 @@
-pipeline {
-  agent none
-
+node {
   def app
 
-  stages {
-    // stage('Clone repository') {
-    //     /* Let's make sure we have the repository cloned to our workspace */
-    //     steps {
-    //       checkout scm
-    //     }
-        
-    // }
+  stage('Build image') {
+    app = docker.build("sjweath/react-test")
+  }
 
-    stage('Build image') {
-      steps {
-        app = docker.build("sjweath/react-test")
-      }
+  stage('Test image') {
+    app.inside {
+      sh 'ls -l'
     }
+  }
 
-    stage('Test image') {
-      steps {
-        app.inside {
-            sh 'ls -l'
-        }
-      }
-    }
+  stage('Push image') {
+    def packageJson = readJSON file: 'package.json'
 
-    stage('Push image') {
-      steps {
-        def packageJson = readJSON file: 'package.json'
-        
-        sh 'echo "${packageJson.version}"'
+    sh 'echo "${packageJson.version}"'
 
-        docker.withRegistry('https://registry-vpc.cn-shanghai.aliyuncs.com', 'docker-hub-credentials') {
-            app.push("0.1.5-build-${env.BUILD_NUMBER}")
-            app.push("latest")
-        }
-      }
+    docker.withRegistry('https://registry-vpc.cn-shanghai.aliyuncs.com', 'docker-hub-credentials') {
+      app.push("0.1.5-build-${env.BUILD_NUMBER}")
+      app.push("latest")
     }
   }
 }
