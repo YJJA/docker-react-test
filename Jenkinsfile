@@ -3,7 +3,7 @@ node {
   def packageJson
 
   stage('Build image') {
-    app = docker.build("sjweath/react-test")
+    app = docker.build("sjweath/react-test", "--no-cache")
   }
 
   stage('Test image') {
