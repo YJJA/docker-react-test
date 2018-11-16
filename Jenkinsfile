@@ -7,7 +7,7 @@ node {
   }
 
   stage('Build image') {
-    app = docker.build("sjweath/react-test", "--no-cache .")
+    app = docker.build("sjweath/react-test")
   }
 
   stage('Test image') {
