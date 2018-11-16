@@ -1,8 +1,11 @@
-const Koa = require('koa');
-const serve = require('koa-static');
+const Koa = require('koa')
+const serve = require('koa-static')
 
-const app = new Koa();
-app.use(serve('build'));
-app.listen(3000);
+const app = new Koa()
+app.use(serve('build'))
 
-console.log('listening on port 3000');
+const port = process.env.PORT || 3000
+
+app.listen(port)
+
+console.log(`listening on port ${port}`)
