@@ -12,7 +12,7 @@ node {
   }
 
   stage('Push image') {
-    def packageJson = readJSON file: 'package.json', test: '{ "version": "value" }'
+    def packageJson = readJSON file: 'package.json'
     docker.withRegistry('https://registry-vpc.cn-shanghai.aliyuncs.com', 'docker-hub-credentials') {
       app.push("${packageJson.version}-build-${env.BUILD_NUMBER}")
       app.push("latest")
