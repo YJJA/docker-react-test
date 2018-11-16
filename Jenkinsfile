@@ -1,25 +1,41 @@
 pipeline {
-  agent {
-    docker {
-      image 'node:8.9-alpine'
-      args '-p 3000:3000 -p 5000:5000' 
-    }
-  }
+  agent none
+
+  def app
 
   stages {
-    stage('Build') {
+    // stage('Clone repository') {
+    //     /* Let's make sure we have the repository cloned to our workspace */
+    //     steps {
+    //       checkout scm
+    //     }
+        
+    // }
+
+    stage('Build image') {
       steps {
-        sh 'npm install && npm build'
+        app = docker.build("sjweath/react-test")
       }
     }
-    stage('Test') {
+
+    stage('Test image') {
       steps {
-        sh 'echo \'Testing\''
+        app.inside {
+            sh 'ls -l'
+        }
       }
     }
-    stage('Deploy') {
+
+    stage('Push image') {
       steps {
-        sh 'echo \'Deploy\''
+        def packageJson = readJSON file: 'package.json'
+        
+        sh 'echo "${packageJson.version}"'
+
+        docker.withRegistry('https://registry-vpc.cn-shanghai.aliyuncs.com', 'docker-hub-credentials') {
+            app.push("0.1.5-build-${env.BUILD_NUMBER}")
+            app.push("latest")
+        }
       }
     }
   }
