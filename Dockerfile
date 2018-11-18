@@ -11,6 +11,7 @@ COPY . .
 RUN set -ex \
     && npm install --registry=$NPM_REGISTRY \
     && npm run build \
+    && ls -la node_modules/.bin \
     && rm -rf node_modules \
     && npm install --production --silent --registry=$NPM_REGISTRY \
     && mv node_modules ../ \
